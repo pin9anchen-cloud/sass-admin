@@ -2,7 +2,14 @@
 import axios from "axios";
 import { getToken, setToken, clearAuth } from "./auth";
 
-export const API_BASE_URL = "http://localhost:8080";
+// 支持通过 REACT_APP_API_BASE_URL 环境变量在不同环境下指向不同后端，本地开发默认走 localhost
+export const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
+// WebSocket 地址默认由 API_BASE_URL 派生（http -> ws，https -> wss），
+// 也可以用 REACT_APP_WS_BASE_URL 单独覆盖（比如接口和 WS 网关不在同一个域名时）
+export const WS_BASE_URL =
+  process.env.REACT_APP_WS_BASE_URL || API_BASE_URL.replace(/^http/, "ws");
 
 const request = axios.create({
   baseURL: API_BASE_URL,
