@@ -1,16 +1,16 @@
-.login {
+.register {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f6fa;
 }
 
-.login-card {
+.register-card {
   width: 360px;
 }
 
-.login-footer {
+.register-footer {
   margin-top: 12px;
   text-align: center;
   color: #999;

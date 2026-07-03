@@ -5,3 +5,8 @@ import request from "../utils/request";
 export function loginAPI(username, password) {
   return request.post("/auth/login", { username, password });
 }
+
+// 商户注册：成功会直接签发 token（等同登录），不用再跳一次登录页
+export function registerAPI(username, password, shopName) {
+  return request.post("/auth/register", { username, password, shopName });
+}

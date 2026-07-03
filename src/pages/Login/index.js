@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, Form, Input, Button, message } from "antd";
 import { loginAPI } from "../../apis/auth";
 import { setAuth } from "../../utils/auth";
@@ -53,6 +53,9 @@ function Login() {
             登录
           </Button>
         </Form>
+        <div className="login-footer">
+          还没有账号？<Link to="/register">去注册</Link>
+        </div>
       </Card>
     </div>
   );
