@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 
 const API = "http://localhost:8080";
-const TENANT = 1;
 
 const http = axios.create({
   baseURL: API,
@@ -78,7 +77,8 @@ function MerchantAdmin() {
     loadStats();
     loadOrders("");
 
-    const ws = new WebSocket(`ws://localhost:8080/ws/order/${TENANT}`);
+    const tenantId = localStorage.getItem("tenantId");
+    const ws = new WebSocket(`ws://localhost:8080/ws/order/${tenantId}`);
     ws.onopen = () => setWsConnected(true);
     ws.onmessage = (event) => {
       message.success("🔔 " + event.data);
@@ -87,6 +87,7 @@ function MerchantAdmin() {
       setFilterStatus("");
     };
     ws.onclose = () => setWsConnected(false);
+    // 组件卸载时关闭连接，避免残留 socket
     return () => ws.close();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -127,8 +128,6 @@ function MerchantAdmin() {
     cursor: "pointer",
     border: filterStatus === status ? "2px solid #6c5ce7" : undefined,
   });
-  const tenantId = localStorage.getItem("tenantId");
-  const ws = new WebSocket(`ws://localhost:8080/ws/order/${tenantId}`);
 
   return (
     <div style={{ padding: 24, background: "#f5f6fa", minHeight: "100vh" }}>
