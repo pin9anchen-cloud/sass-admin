@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Input, Button, message } from "antd";
-import axios from "axios";
-
-const API = "http://localhost:8080";
+import { loginAPI } from "../../apis/auth";
+import { setAuth } from "../../utils/auth";
+import "./index.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,23 +12,13 @@ function Login() {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      // 用 form-urlencoded 请求体传账号密码，避免密码出现在 URL 里（日志/浏览器历史可见）
-      const res = await axios.post(
-        `${API}/auth/login`,
-        new URLSearchParams({
-          username: values.username,
-          password: values.password,
-        }),
-      );
-      if (res.data.code === 200) {
-        // 登录成功：把 token、店铺名、租户ID 存起来
-        localStorage.setItem("token", res.data.data.token);
-        localStorage.setItem("shopName", res.data.data.shopName);
-        localStorage.setItem("tenantId", res.data.data.tenantId);
+      const res = await loginAPI(values.username, values.password);
+      if (res.code === 200) {
+        setAuth(res.data);
         message.success("登录成功");
         navigate("/admin"); // 跳到后台
       } else {
-        message.error(res.data.message || "登录失败");
+        message.error(res.message || "登录失败");
       }
     } catch (e) {
       message.error(e.response?.data?.message || "登录失败");
@@ -38,16 +28,8 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        background: "#f5f6fa",
-      }}
-    >
-      <Card title="商家登录" style={{ width: 360 }}>
+    <div className="login">
+      <Card title="商家登录" className="login-card">
         <Form onFinish={onFinish}>
           <Form.Item
             name="username"

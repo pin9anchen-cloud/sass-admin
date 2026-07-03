@@ -1,0 +1,25 @@
+.merchant-admin {
+  padding: 24px;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.merchant-admin-header {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.merchant-admin-badge {
+  margin-left: 16px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.merchant-admin-logout {
+  float: right;
+}
+
+.merchant-admin-stats {
+  margin-bottom: 24px;
+}

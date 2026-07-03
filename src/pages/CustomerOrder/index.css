@@ -1,0 +1,55 @@
+.customer-order {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.customer-order-result {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.customer-order-header {
+  margin-bottom: 12px;
+}
+
+.customer-order-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.customer-order-table {
+  color: #999;
+  font-size: 13px;
+}
+
+.customer-order-item-soldout {
+  opacity: 0.4;
+}
+
+.customer-order-soldout-text {
+  color: #999;
+}
+
+.customer-order-footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: 12px;
+}
+
+.customer-order-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.customer-order-total {
+  font-size: 18px;
+}
+
+.customer-order-total-amount {
+  color: #f5222d;
+}
