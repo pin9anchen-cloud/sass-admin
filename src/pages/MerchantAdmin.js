@@ -18,6 +18,13 @@ const http = axios.create({
   baseURL: API,
 });
 // 每个请求自动带上 Token
+http.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 http.interceptors.response.use(
   (res) => {
     // 如果响应头带了新token，替换掉本地的（滑动续期）

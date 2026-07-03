@@ -12,16 +12,19 @@ function Login() {
   const onFinish = async (values) => {
     setLoading(true);
     try {
+      // 用 form-urlencoded 请求体传账号密码，避免密码出现在 URL 里（日志/浏览器历史可见）
       const res = await axios.post(
-        `${API}/auth/login?username=${values.username}&password=${values.password}`,
+        `${API}/auth/login`,
+        new URLSearchParams({
+          username: values.username,
+          password: values.password,
+        }),
       );
       if (res.data.code === 200) {
-        // 登录成功：把 token 和店铺名存起来
+        // 登录成功：把 token、店铺名、租户ID 存起来
         localStorage.setItem("token", res.data.data.token);
         localStorage.setItem("shopName", res.data.data.shopName);
-        localStorage.setItem("token", res.data.data.token);
-        localStorage.setItem("shopName", res.data.data.shopName);
-        localStorage.setItem("tenantId", res.data.data.tenantId); // 加这行
+        localStorage.setItem("tenantId", res.data.data.tenantId);
         message.success("登录成功");
         navigate("/admin"); // 跳到后台
       } else {
