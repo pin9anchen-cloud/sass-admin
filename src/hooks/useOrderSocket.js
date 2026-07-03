@@ -1,6 +1,6 @@
 // 订阅商家订单的实时推送；断线自动重连（指数退避），组件卸载时关闭连接并停止重连
 import { useEffect, useRef, useState } from "react";
-import { getTenantId } from "../utils/auth";
+import { getTenantId, getToken } from "../utils/auth";
 import { WS_BASE_URL } from "../utils/request";
 
 const INITIAL_RETRY_DELAY = 1000; // 1s
@@ -19,7 +19,11 @@ function useOrderSocket(onMessage) {
 
     const connect = () => {
       const tenantId = getTenantId();
-      ws = new WebSocket(`${WS_BASE_URL}/ws/order/${tenantId}`);
+      const token = getToken();
+      // 后端要求握手 URL 带 token 校验身份，租户和 token 对不上会被直接拒绝
+      ws = new WebSocket(
+        `${WS_BASE_URL}/ws/order/${tenantId}?token=${encodeURIComponent(token)}`,
+      );
 
       ws.onopen = () => {
         setConnected(true);
