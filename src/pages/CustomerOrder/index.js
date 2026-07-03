@@ -22,12 +22,13 @@ function CustomerOrder() {
 
   // 下单成功页
   if (ordered) {
+    const paidAmount = ordered.reduce((sum, o) => sum + Number(o.amount), 0);
     return (
       <div className="customer-order-result">
         <Result
           status="success"
           title="下单成功！"
-          subTitle={`订单号：${ordered.orderNo.substring(0, 8)}... 金额：¥${ordered.amount}`}
+          subTitle={`共 ${ordered.length} 笔订单，合计支付 ¥${paidAmount.toFixed(2)}`}
           extra={<Button onClick={reset}>继续点餐</Button>}
         />
       </div>

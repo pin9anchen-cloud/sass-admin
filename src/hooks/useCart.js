@@ -1,11 +1,11 @@
-// 封装点餐购物车状态、合计计算与下单提交（简化：每个商品分别下单，最后统一模拟支付）
+// 封装点餐购物车状态、合计计算与下单提交（简化：每个商品分别下单，真实场景应做成一单多商品）
 import { useCallback, useState } from "react";
 import { message } from "antd";
 import { createOrderAPI, payCallbackAPI } from "../apis/order";
 
 function useCart(tenantId, products) {
   const [cart, setCart] = useState({}); // { productId: quantity }
-  const [ordered, setOrdered] = useState(null);
+  const [ordered, setOrdered] = useState(null); // 下单成功后的订单列表
 
   const changeQty = useCallback((productId, qty) => {
     setCart((prev) => ({ ...prev, [productId]: qty }));
@@ -23,16 +23,16 @@ function useCart(tenantId, products) {
       return;
     }
     try {
-      let lastOrder = null;
+      const createdOrders = [];
       for (const [productId, qty] of items) {
         const res = await createOrderAPI(tenantId, productId, qty);
-        lastOrder = res.data;
+        createdOrders.push(res.data);
       }
-      // 演示：直接模拟支付成功
-      if (lastOrder) {
-        await payCallbackAPI(tenantId, lastOrder.orderNo);
+      // 演示：逐笔模拟支付成功，购物车里每个商品各自的订单都要付
+      for (const order of createdOrders) {
+        await payCallbackAPI(tenantId, order.orderNo);
       }
-      setOrdered(lastOrder);
+      setOrdered(createdOrders);
       message.success("下单并支付成功！");
     } catch (e) {
       message.error(e.response?.data?.message || "下单失败");
