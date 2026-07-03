@@ -12,8 +12,10 @@ function MerchantAdmin() {
     stats,
     orders,
     filterStatus,
+    pagination,
     loadStats,
     handleFilter,
+    handlePageChange,
     handleComplete,
   } = useOrders();
 
@@ -127,7 +129,12 @@ function MerchantAdmin() {
           rowKey="id"
           columns={columns}
           dataSource={orders}
-          pagination={{ pageSize: 10 }}
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: orders.length,
+            onChange: handlePageChange,
+          }}
         />
       </Card>
     </div>

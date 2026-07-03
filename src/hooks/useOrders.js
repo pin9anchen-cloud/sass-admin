@@ -11,6 +11,9 @@ function useOrders() {
   const [stats, setStats] = useState({});
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState(""); // ''=全部
+  // 受控分页：后端接口目前还是一次性返回全量订单（真分页见 BACKEND_TODO.md），
+  // 这里先把分页状态收进 React，方便以后接上后端分页时只用改 loadOrders 的调用方式
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
   const loadStats = useCallback(() => {
     getOrderStatisticsAPI().then((res) => setStats(res.data || {}));
@@ -28,10 +31,15 @@ function useOrders() {
   const handleFilter = useCallback(
     (status) => {
       setFilterStatus(status);
+      setPagination((prev) => ({ ...prev, current: 1 })); // 切换筛选后回到第一页，避免停在一个筛选后不存在的页码上
       loadOrders(status);
     },
     [loadOrders],
   );
+
+  const handlePageChange = useCallback((current, pageSize) => {
+    setPagination({ current, pageSize });
+  }, []);
 
   const handleComplete = useCallback(
     (orderNo) => {
@@ -52,9 +60,11 @@ function useOrders() {
     stats,
     orders,
     filterStatus,
+    pagination,
     loadStats,
     loadOrders,
     handleFilter,
+    handlePageChange,
     handleComplete,
   };
 }
