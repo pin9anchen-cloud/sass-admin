@@ -6,8 +6,12 @@ export function getOrderStatisticsAPI() {
   return request.get("/orders/statistics");
 }
 
-export function getOrdersAPI(status) {
-  return request.get(status ? `/orders?status=${status}` : "/orders");
+export function getOrdersAPI(status, page = 1, pageSize = 10) {
+  const params = new URLSearchParams({ page, pageSize });
+  if (status) {
+    params.set("status", status);
+  }
+  return request.get(`/orders?${params.toString()}`);
 }
 
 export function completeOrderAPI(orderNo) {
